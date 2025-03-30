@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE+ - 全球首款偶像驱动型AI翻译生态平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .cover-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 100px);
+            position: relative;
+            z-index: 2;
+            padding: 0 2rem;
+        }
+
+        .cover-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+            opacity: 0;
+            animation: fadeInScale var(--animation-duration) var(--animation-timing) 0.2s forwards;
+            background: linear-gradient(135deg, 
+                var(--primary-color), 
+                var(--secondary-color), 
+                var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 4px;
+            line-height: 1.2;
+            text-align: center;
+            position: relative;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .cover-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent,
+                var(--primary-color),
+                var(--secondary-color),
+                transparent);
+            animation: expandWidth 1s var(--animation-timing) 0.4s forwards;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        .cover-subtitle {
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            font-weight: 500;
+            margin-bottom: clamp(2rem, 6vh, 4rem);
+            opacity: 0;
+            animation: fadeInUp var(--animation-duration) var(--animation-timing) 0.4s forwards;
+            color: var(--gray-text);
+            letter-spacing: 2px;
+            text-align: center;
+            max-width: 90%;
+            position: relative;
+        }
+
+        .cover-tagline {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp var(--animation-duration) var(--animation-timing) 0.6s forwards;
+            color: var(--light-text);
+            padding: clamp(1rem, 3vh, 2rem);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            max-width: min(800px, 90%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--animation-timing);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .cover-tagline:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .cover-tagline::before,
+        .cover-tagline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent,
+                var(--primary-color),
+                var(--secondary-color),
+                transparent);
+            animation: slideIn 1s var(--animation-timing) 0.8s forwards;
+            transform: scaleX(0);
+        }
+
+        @keyframes slideIn {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .cover-tagline::before { top: 0; }
+        .cover-tagline::after { bottom: 0; }
+
+        .accent-circle-large {
+            position: fixed;
+            width: min(800px, 100vw);
+            height: min(800px, 100vw);
+            border-radius: 50%;
+            background: radial-gradient(circle at center, 
+                rgba(var(--secondary-rgb), 0.1),
+                transparent 70%);
+            right: -25%;
+            top: -25%;
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+            animation: floatAnimation 20s ease-in-out infinite;
+        }
+
+        .accent-circle-small {
+            position: fixed;
+            width: min(400px, 50vw);
+            height: min(400px, 50vw);
+            border-radius: 50%;
+            background: radial-gradient(circle at center, 
+                rgba(var(--primary-rgb), 0.1),
+                transparent 70%);
+            left: -12.5%;
+            bottom: -12.5%;
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+            animation: floatAnimation 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(2%, 2%) rotate(5deg);
+            }
+            50% {
+                transform: translate(-2%, 4%) rotate(-5deg);
+            }
+            75% {
+                transform: translate(-4%, 2%) rotate(3deg);
+            }
+        }
+
+        .heart-icon {
+            color: var(--primary-color);
+            margin: 0 15px;
+            animation: pulseAndRotate 2s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.5));
+        }
+
+        @keyframes pulseAndRotate {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                color: var(--primary-color);
+            }
+            50% { 
+                transform: scale(1.2) rotate(8deg);
+                color: var(--secondary-color);
+            }
+        }
+
+        .nav-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .cover-container {
+                padding: 1rem;
+                height: calc(100vh - 80px);
+            }
+
+            .cover-title {
+                margin-bottom: 1rem;
+            }
+
+            .cover-subtitle {
+                margin-bottom: 2rem;
+            }
+
+            .cover-tagline {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="accent-line"></div>
+        <div class="accent-circle-large"></div>
+        <div class="accent-circle-small"></div>
+        
+        <main class="slide-content">
+            <div class="cover-container">
+                <h1 class="cover-title">
+                    VOICE<span style="color: var(--accent-color)">+</span>
+                </h1>
+                
+                <h2 class="cover-subtitle">
+                    全球首款偶像驱动型AI翻译生态平台
+                </h2>
+                
+                <div class="cover-tagline">
+                    <i class="fas fa-heart heart-icon"></i>
+                    听懂世界的声音，只为听见TA的心跳
+                    <i class="fas fa-heart heart-icon"></i>
+                </div>
+            </div>
+        </main>
+
+        <footer class="slide-footer">
+            <span class="page-number">01 / 09</span>
+            <div class="navigation">
+                <a href="page2-summary.html" class="nav-button">
+                    开启偶像之旅
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html> 

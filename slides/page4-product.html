@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE+ - 产品框架</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .product-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(1rem, 2vw, 2rem);
+            opacity: 0;
+            animation: fadeInScale var(--animation-duration) var(--animation-timing) 0.2s forwards;
+            height: calc(100vh - 200px);
+            align-content: center;
+        }
+
+        .tech-stack {
+            grid-column: 1 / -1;
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: clamp(1.2rem, 2vw, 2rem);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 1.5rem;
+            transition: all 0.4s var(--animation-timing);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .tech-stack:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .tech-stack::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 80%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 20px;
+        }
+
+        .tech-stack:hover::before {
+            opacity: 1;
+        }
+
+        .stack-title {
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .stack-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg,
+                var(--primary-color),
+                var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .tech-stack:hover .stack-title::after {
+            width: 120px;
+        }
+
+        .stack-icon-container {
+            width: clamp(40px, 5vw, 50px);
+            height: clamp(40px, 5vw, 50px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stack-icon {
+            font-size: clamp(1.4rem, 2vw, 1.8rem);
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .stack-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle,
+                rgba(var(--primary-rgb), 0.2),
+                transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulseIcon 2s infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.8rem, 2vw, 1.5rem);
+        }
+
+        .stack-item {
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .stack-item:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+                       0 0 15px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .stack-item-title {
+            font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+            color: var(--light-text);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .stack-item-title i {
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(var(--primary-rgb), 0.3));
+        }
+
+        .stack-item:hover .stack-item-title i {
+            color: var(--secondary-color);
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
+        }
+
+        .stack-item-content {
+            color: var(--gray-text);
+            font-size: clamp(0.9rem, 1.4vw, 1rem);
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        .stack-item:hover .stack-item-content {
+            color: var(--light-text);
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: clamp(1.2rem, 2vw, 2rem);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s var(--animation-timing);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            height: fit-content;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 80%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 20px;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-title {
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .feature-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg,
+                var(--primary-color),
+                var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .feature-card:hover .feature-title::after {
+            width: 80px;
+        }
+
+        .feature-icon {
+            font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(var(--primary-rgb), 0.3));
+        }
+
+        .feature-card:hover .feature-icon {
+            color: var(--secondary-color);
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .feature-list li {
+            color: var(--gray-text);
+            font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+            margin: 0.8rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .feature-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(var(--primary-rgb), 0.3));
+        }
+
+        .feature-list li:hover {
+            transform: translateX(10px);
+            color: var(--light-text);
+        }
+
+        .feature-list li:hover::before {
+            color: var(--secondary-color);
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
+        }
+
+        .highlight-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+                       0 0 15px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .highlight-title {
+            font-size: clamp(1.1rem, 2vw, 1.2rem);
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .highlight-box:hover .highlight-title {
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 1024px) {
+            .product-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                height: auto;
+                padding: 2rem 1rem;
+            }
+
+            .stack-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tech-stack {
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .stack-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-stack,
+            .feature-card {
+                padding: 1.2rem;
+            }
+
+            .stack-item {
+                padding: 1rem;
+            }
+
+            .feature-list li {
+                margin: 0.6rem 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="accent-line"></div>
+        <div class="accent-circle"></div>
+        
+        <header class="slide-header">
+            <h1 class="page-title">产品框架结构</h1>
+        </header>
+
+        <main class="slide-content">
+            <div class="product-container">
+                <div class="tech-stack">
+                    <h3 class="stack-title">
+                        <div class="stack-icon-container">
+                            <i class="fas fa-cube stack-icon"></i>
+                        </div>
+                        三级火箭技术底座
+                    </h3>
+                    <div class="stack-grid">
+                        <div class="stack-item">
+                            <div class="stack-item-title">
+                                <i class="fas fa-link"></i>
+                                区块链层
+                            </div>
+                            <div class="stack-item-content">
+                                Solana高性能链驱动积分通证化、NFT版权存证
+                            </div>
+                        </div>
+                        <div class="stack-item">
+                            <div class="stack-item-title">
+                                <i class="fas fa-brain"></i>
+                                AI算法层
+                            </div>
+                            <div class="stack-item-content">
+                                JarvisBot多模型架构（LLM+行业知识库精准调度）
+                            </div>
+                        </div>
+                        <div class="stack-item">
+                            <div class="stack-item-title">
+                                <i class="fas fa-layer-group"></i>
+                                平台层
+                            </div>
+                            <div class="stack-item-content">
+                                分层覆盖基础翻译→大模型知识库→粉丝元宇宙社区
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3 class="feature-title">
+                        <i class="fas fa-microchip feature-icon"></i>
+                        硬件革命性突破
+                    </h3>
+                    <ul class="feature-list">
+                        <li>高颜值、轻便的AI助手设计</li>
+                        <li>深度联动明星IP（语音/外观/徽标定制）</li>
+                        <li>力学感应系统：轻压翻译/重压偶像语音彩蛋触发</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3 class="feature-title">
+                        <i class="fas fa-star feature-icon"></i>
+                        核心产品彩蛋
+                    </h3>
+                    <ul class="feature-list">
+                        <li>"跨次元应答"：翻译时随机掉落偶像限定语音</li>
+                        <li>Web3任务体系：翻译数据可兑换独家数字藏品</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <div class="highlight-title">
+                            <i class="fas fa-rocket"></i>
+                            战略定位
+                        </div>
+                        <div class="stack-item-content">
+                            粉丝经济超级入口 × Web3数字资产桥接器
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="slide-footer">
+            <span class="page-number">04 / 09</span>
+            <div class="navigation">
+                <a href="page3-market.html" class="nav-button">
+                    <i class="fas fa-arrow-left"></i>
+                    返回
+                </a>
+                <a href="page5-fans.html" class="nav-button">
+                    继续
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.tech-stack, .feature-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                
+                const rotateY = ((x - rect.width / 2) / rect.width) * 10;
+                const rotateX = ((y - rect.height / 2) / rect.height) * -10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+    });
+    </script>
+</body>
+</html> 

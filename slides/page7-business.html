@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE+ - 商业模式</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .business-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(1rem, 2vw, 2rem);
+            opacity: 0;
+            animation: fadeInScale var(--animation-duration) var(--animation-timing) 0.2s forwards;
+            position: relative;
+            z-index: 1;
+            height: calc(100vh - 200px);
+            align-content: center;
+            padding: 0 2rem;
+        }
+
+        .business-card {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: clamp(1.2rem, 2vw, 2rem);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            height: fit-content;
+        }
+
+        .business-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 80%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 20px;
+        }
+
+        .business-card:hover::before {
+            opacity: 1;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .business-icon {
+            position: relative;
+            width: clamp(40px, 5vw, 50px);
+            height: clamp(40px, 5vw, 50px);
+            margin-bottom: 0.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .business-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 5px rgba(var(--primary-rgb), 0.3));
+        }
+
+        .business-title {
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .business-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .business-card:hover .business-title::after {
+            width: 80px;
+        }
+
+        .business-subtitle {
+            font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+            font-weight: 500;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .business-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .business-list li {
+            color: var(--gray-text);
+            font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+            margin: 0.6rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .business-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 3px rgba(var(--primary-rgb), 0.3));
+        }
+
+        .business-list li:hover {
+            transform: translateX(10px);
+            color: var(--light-text);
+        }
+
+        .business-list li:hover::before {
+            background: var(--secondary-color);
+            transform: translateY(-50%) scale(1.5);
+            filter: drop-shadow(0 0 5px rgba(var(--primary-rgb), 0.5));
+        }
+
+        .highlight-text {
+            font-size: clamp(1.6rem, 2.5vw, 2rem);
+            font-weight: 600;
+            margin: 1rem 0 1.5rem;
+            text-align: center;
+            color: var(--light-text);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+            position: relative;
+            grid-column: 1 / -1;
+        }
+
+        .highlight-text span {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .highlight-text span::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), transparent);
+            animation: expandWidth 1s var(--animation-timing) 0.6s forwards;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @media (max-width: 1200px) {
+            .business-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 2rem 1rem;
+                height: auto;
+            }
+
+            .business-card {
+                padding: 1.2rem;
+            }
+
+            .business-title {
+                margin-bottom: 0.6rem;
+            }
+
+            .business-subtitle {
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .business-container {
+                grid-template-columns: 1fr;
+                height: auto;
+                gap: 1rem;
+                padding: 1.5rem 1rem;
+            }
+
+            .business-list li {
+                margin: 0.5rem 0;
+            }
+
+            .highlight-text {
+                margin: 0.8rem 0 1.2rem;
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: floatParticle 8s infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes floatParticle {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            25% {
+                transform: translate(100px, -50px) rotate(180deg) scale(1.2);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(200px, 0) rotate(360deg) scale(1);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translate(100px, 50px) rotate(180deg) scale(0.8);
+                opacity: 0.4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="accent-line"></div>
+        <div class="accent-circle"></div>
+        
+        <svg width="0" height="0">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color: var(--primary-color)" />
+                    <stop offset="100%" style="stop-color: var(--secondary-color)" />
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <div class="floating-particles">
+            <div class="particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="top: 60%; left: 20%; animation-delay: 1s;"></div>
+            <div class="particle" style="top: 40%; left: 80%; animation-delay: 2s;"></div>
+            <div class="particle" style="top: 80%; left: 60%; animation-delay: 3s;"></div>
+        </div>
+        
+        <header class="slide-header">
+            <h1 class="page-title">商业模式</h1>
+        </header>
+
+        <main class="slide-content">
+            <div class="highlight-text">
+                <span>四维收入增长引擎</span> - 现金+流量双轮驱动
+            </div>
+            
+            <div class="business-container">
+                <div class="business-card">
+                    <div class="business-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3 class="business-title">
+                        硬件收入
+                    </h3>
+                    <ul class="business-list">
+                        <li>智能翻译设备销售</li>
+                        <li>定制款附加收入</li>
+                    </ul>
+                </div>
+
+                <div class="business-card">
+                    <div class="business-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 7h-8V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h8v3c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="business-title">
+                        软件订阅收入
+                    </h3>
+                    <ul class="business-list">
+                        <li>订阅服务矩阵</li>
+                        <li>特殊语言定制服务</li>
+                    </ul>
+                </div>
+
+                <div class="business-card">
+                    <div class="business-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="business-title">
+                        粉丝定制收入
+                    </h3>
+                    <ul class="business-list">
+                        <li>应援衍生品体系</li>
+                        <li>NFT头像、粉丝周边等</li>
+                    </ul>
+                </div>
+
+                <div class="business-card">
+                    <div class="business-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="business-title">
+                        Web3收入
+                    </h3>
+                    <ul class="business-list">
+                        <li>代币经济模型</li>
+                        <li>硬件收入反哺代币</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer class="slide-footer">
+            <span class="page-number">07 / 09</span>
+            <div class="navigation">
+                <a href="page6-web3.html" class="nav-button">
+                    <i class="fas fa-arrow-left"></i>
+                    返回
+                </a>
+                <a href="page8-roadmap.html" class="nav-button">
+                    继续
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.business-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                
+                const rotateY = ((x - rect.width / 2) / rect.width) * 10;
+                const rotateX = ((y - rect.height / 2) / rect.height) * -10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+
+        // 创建浮动粒子
+        const particlesContainer = document.querySelector('.floating-particles');
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 8}s`;
+            particlesContainer.appendChild(particle);
+        }
+    });
+    </script>
+</body>
+</html> 

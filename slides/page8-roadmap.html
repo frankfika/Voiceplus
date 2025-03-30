@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE+ - 发展路径</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .roadmap-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            opacity: 0;
+            animation: fadeInScale var(--animation-duration) var(--animation-timing) 0.2s forwards;
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: clamp(1rem, 2vh, 2rem);
+        }
+
+        .vision-text {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            text-align: center;
+            color: var(--gray-text);
+            margin-bottom: clamp(1rem, 2vh, 1.5rem);
+            line-height: 1.5;
+            position: relative;
+            padding: clamp(0.8rem, 1.5vh, 1.2rem);
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.4s var(--animation-timing);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .vision-text:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .vision-text strong {
+            color: var(--light-text);
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .timeline {
+            position: relative;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .timeline::before {
+            display: none;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            margin: 0;
+            opacity: 0;
+            animation: fadeInUp var(--animation-duration) var(--animation-timing) forwards;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.9s; }
+        .timeline-item:nth-child(4) { animation-delay: 1.2s; }
+
+        .timeline-content {
+            width: 100%;
+            padding: clamp(0.8rem, 1.5vh, 1.2rem);
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: all 0.4s var(--animation-timing);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .timeline-content::before {
+            display: none;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 55%;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -48px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -48px;
+        }
+
+        .timeline-date {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
+            color: var(--light-text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-icon {
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .timeline-text {
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            color: var(--gray-text);
+            line-height: 1.4;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateY(-50%) scale(1.2);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .timeline {
+                grid-template-columns: repeat(2, 1fr);
+                gap: clamp(0.8rem, 1.5vw, 1rem);
+            }
+
+            .vision-text {
+                margin-bottom: clamp(0.8rem, 1.5vh, 1rem);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .roadmap-container {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .timeline {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .timeline-content {
+                padding: 0.8rem;
+            }
+
+            .timeline-date {
+                font-size: 1rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .timeline-text {
+                font-size: 0.9rem;
+            }
+
+            .vision-text {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+                margin-bottom: 0.8rem;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
+                rgba(var(--primary-rgb), 0.1) 0%,
+                transparent 80%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 15px;
+        }
+
+        .timeline-content:hover .glow-effect {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="accent-line"></div>
+        <div class="accent-circle"></div>
+        
+        <header class="slide-header">
+            <h1 class="page-title">发展路径</h1>
+        </header>
+
+        <main class="slide-content">
+            <div class="roadmap-container">
+                <div class="vision-text">
+                    在未来，计划绑定<strong>200+</strong>偶像IP，建立跨娱乐公司的内容联盟，目标<strong>3年内</strong>覆盖全球<strong>1亿</strong>粉丝用户。
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <i class="fas fa-rocket timeline-icon"></i>
+                                Q2 2025
+                            </div>
+                            <div class="timeline-text">
+                                签约3-5家头部娱乐公司，开发测试版APP
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <i class="fas fa-microphone timeline-icon"></i>
+                                Q3 2025
+                            </div>
+                            <div class="timeline-text">
+                                预售10万台硬件，启动百万语音库众包计划
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <i class="fas fa-chart-line timeline-icon"></i>
+                                Q4 2025
+                            </div>
+                            <div class="timeline-text">
+                                上线星链交易所，举办虚拟翻译奥运会
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">
+                                <i class="fas fa-check-circle timeline-icon"></i>
+                                Q1 2026
+                            </div>
+                            <div class="timeline-text">
+                                推出企业解决方案，实现硬件-软件-生态闭环
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="slide-footer">
+            <span class="page-number">08 / 09</span>
+            <div class="navigation">
+                <a href="page7-business.html" class="nav-button">
+                    <i class="fas fa-arrow-left"></i>
+                    返回
+                </a>
+                <a href="page9-end.html" class="nav-button">
+                    继续
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const timelineContents = document.querySelectorAll('.timeline-content');
+        const visionText = document.querySelector('.vision-text');
+        
+        // 为愿景文本添加鼠标跟随效果
+        visionText.addEventListener('mousemove', (e) => {
+            const rect = visionText.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const rotateY = ((x - rect.width / 2) / rect.width) * 5;
+            const rotateX = ((y - rect.height / 2) / rect.height) * -5;
+            
+            visionText.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+        
+        visionText.addEventListener('mouseleave', () => {
+            visionText.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+        });
+        
+        // 为时间线内容添加鼠标跟随效果
+        timelineContents.forEach(content => {
+            const glowEffect = document.createElement('div');
+            glowEffect.className = 'glow-effect';
+            content.appendChild(glowEffect);
+            
+            content.addEventListener('mousemove', (e) => {
+                const rect = content.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                content.style.setProperty('--mouse-x', `${x}px`);
+                content.style.setProperty('--mouse-y', `${y}px`);
+                
+                const rotateY = ((x - rect.width / 2) / rect.width) * 5;
+                const rotateX = ((y - rect.height / 2) / rect.height) * -5;
+                
+                content.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            content.addEventListener('mouseleave', () => {
+                content.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+    });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE+ - 粉丝定制</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .fans-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(1rem, 2vw, 2rem);
+            opacity: 0;
+            animation: fadeInScale var(--animation-duration) var(--animation-timing) 0.2s forwards;
+            height: calc(100vh - 200px);
+            align-content: center;
+        }
+
+        .fans-card {
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: clamp(1.2rem, 2vw, 2rem);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--animation-timing);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            height: fit-content;
+        }
+
+        .fans-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .fans-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 80%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 20px;
+        }
+
+        .fans-card:hover::before {
+            opacity: 1;
+        }
+
+        .fans-title {
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .fans-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg,
+                var(--primary-color),
+                var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .fans-card:hover .fans-title::after {
+            width: 80px;
+        }
+
+        .fans-icon-container {
+            width: clamp(40px, 5vw, 50px);
+            height: clamp(40px, 5vw, 50px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fans-icon {
+            font-size: clamp(1.4rem, 2vw, 1.8rem);
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .fans-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle,
+                rgba(var(--primary-rgb), 0.2),
+                transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulseIcon 2s infinite;
+        }
+
+        .fans-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fans-list li {
+            color: var(--gray-text);
+            font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+            margin: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .fans-list li::before {
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(var(--primary-rgb), 0.3));
+        }
+
+        .fans-list li:hover {
+            transform: translateX(10px);
+            color: var(--light-text);
+        }
+
+        .fans-list li:hover::before {
+            color: var(--secondary-color);
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
+        }
+
+        .custom-list li::before {
+            content: '✨';
+        }
+
+        .battle-list li::before {
+            content: '🏆';
+        }
+
+        .economy-list li::before {
+            content: '💎';
+        }
+
+        .sub-list {
+            list-style: none;
+            margin-left: 1.2rem;
+            margin-top: 0.4rem;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .sub-list li {
+            font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+            padding-left: 1.2rem;
+            margin: 0.6rem 0;
+        }
+
+        .sub-list li::before {
+            content: '•';
+            font-size: 1rem;
+            filter: drop-shadow(0 0 3px rgba(var(--primary-rgb), 0.2));
+        }
+
+        .fans-list li:hover .sub-list {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .highlight-text {
+            font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+            font-weight: 600;
+            margin: 1.5rem 0;
+            text-align: center;
+            grid-column: 1 / -1;
+            color: var(--light-text);
+            opacity: 0;
+            animation: fadeInUp var(--animation-duration) var(--animation-timing) 0.4s forwards;
+            position: relative;
+            padding-bottom: 1.2rem;
+        }
+
+        .highlight-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent,
+                var(--primary-color),
+                var(--secondary-color),
+                transparent);
+            animation: expandWidth 1s var(--animation-timing) 0.6s forwards;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        .highlight-text span {
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (max-width: 1200px) {
+            .fans-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                height: auto;
+                padding: 2rem 1rem;
+            }
+
+            .fans-card {
+                padding: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .fans-container {
+                grid-template-columns: 1fr;
+                padding: 1.5rem 1rem;
+            }
+
+            .fans-title {
+                margin-bottom: 1rem;
+            }
+
+            .fans-list li {
+                margin: 0.6rem 0;
+            }
+
+            .sub-list {
+                margin-left: 1rem;
+                margin-top: 0.3rem;
+            }
+
+            .sub-list li {
+                margin: 0.4rem 0;
+            }
+
+            .highlight-text {
+                margin: 1rem 0;
+                padding-bottom: 0.8rem;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="accent-line"></div>
+        <div class="accent-circle"></div>
+        
+        <header class="slide-header">
+            <h1 class="page-title">粉丝定制</h1>
+        </header>
+
+        <main class="slide-content">
+            <div class="highlight-text">
+                首创 <span>"翻译即告白"</span> 模式
+            </div>
+            
+            <div class="fans-container">
+                <div class="fans-card">
+                    <h3 class="fans-title">
+                        <div class="fans-icon-container">
+                            <i class="fas fa-heart fans-icon"></i>
+                        </div>
+                        粉丝定制化体验
+                    </h3>
+                    <ul class="fans-list custom-list">
+                        <li>偶像独家声音翻译定制</li>
+                        <li>可交易NFT偶像头像</li>
+                        <li>定制硬件镭射粉丝头像</li>
+                    </ul>
+                </div>
+
+                <div class="fans-card">
+                    <h3 class="fans-title">
+                        <div class="fans-icon-container">
+                            <i class="fas fa-trophy fans-icon"></i>
+                        </div>
+                        全球粉丝竞技场
+                    </h3>
+                    <ul class="fans-list battle-list">
+                        <li>实时全球翻译动态展示</li>
+                        <li>每日翻译量/活跃度/创意排行榜</li>
+                        <li>应援战役体系：
+                            <ul class="sub-list">
+                                <li>语种守卫战(每日18-20点)</li>
+                                <li>热词闪电战(突发新闻触发)</li>
+                                <li>赛季制偶像应援大战</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="fans-card">
+                    <h3 class="fans-title">
+                        <div class="fans-icon-container">
+                            <i class="fas fa-gem fans-icon"></i>
+                        </div>
+                        粉丝经济体系
+                    </h3>
+                    <ul class="fans-list economy-list">
+                        <li>经纪人计划：
+                            <ul class="sub-list">
+                                <li>星际代理人特权(行程/投票/分成)</li>
+                                <li>代币激励机制</li>
+                                <li>线上线下福利互通</li>
+                            </ul>
+                        </li>
+                        <li>语言学习新模式：偶像教你学外语</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer class="slide-footer">
+            <span class="page-number">05 / 09</span>
+            <div class="navigation">
+                <a href="page4-product.html" class="nav-button">
+                    <i class="fas fa-arrow-left"></i>
+                    返回
+                </a>
+                <a href="page6-web3.html" class="nav-button">
+                    继续
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.fans-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                
+                const rotateY = ((x - rect.width / 2) / rect.width) * 10;
+                const rotateX = ((y - rect.height / 2) / rect.height) * -10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+    });
+    </script>
+</body>
+</html> 

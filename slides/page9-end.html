@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOICE+ - 结语</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .end-container {
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: clamp(1rem, 2vh, 2rem);
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: clamp(1rem, 2vh, 2rem);
+        }
+
+        .end-logo {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: clamp(1rem, 2vh, 2rem);
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: fadeInScale var(--animation-duration) var(--animation-timing) forwards;
+            position: relative;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.4s var(--animation-timing);
+        }
+
+        .end-logo:hover {
+            transform: translateY(-5px) rotateX(10deg);
+        }
+
+        .end-logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                transparent,
+                var(--primary-color),
+                var(--secondary-color),
+                transparent);
+            animation: expandWidth 1s var(--animation-timing) 0.3s forwards;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        .end-text {
+            max-width: 900px;
+            text-align: center;
+            font-size: clamp(1rem, 1.8vw, 1.4rem);
+            line-height: 1.5;
+            color: var(--gray-text);
+            margin-bottom: clamp(1rem, 2vh, 2rem);
+            opacity: 0;
+            animation: fadeInUp var(--animation-duration) var(--animation-timing) 0.3s forwards;
+            padding: clamp(1rem, 2vh, 1.5rem);
+            background: linear-gradient(145deg,
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.4s var(--animation-timing);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .end-text::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 80%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 20px;
+        }
+
+        .end-text:hover::before {
+            opacity: 1;
+        }
+
+        .end-text:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                       0 0 30px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .end-highlight {
+            color: var(--light-text);
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+            padding: 0 5px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .end-highlight::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(135deg,
+                var(--primary-color),
+                var(--secondary-color));
+            opacity: 0.2;
+            z-index: -1;
+            transform: skewX(-15deg);
+            transition: all 0.3s ease;
+        }
+
+        .end-highlight:hover::before {
+            height: 40%;
+            opacity: 0.3;
+            transform: skewX(-20deg);
+        }
+
+        .end-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .end-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            background: radial-gradient(circle at center,
+                var(--primary-color) 0%,
+                transparent 70%);
+            animation: float 6s infinite ease-in-out;
+            filter: blur(20px);
+        }
+
+        .end-circle:nth-child(1) {
+            width: clamp(200px, 30vw, 400px);
+            height: clamp(200px, 30vw, 400px);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .end-circle:nth-child(2) {
+            width: clamp(150px, 25vw, 300px);
+            height: clamp(150px, 25vw, 300px);
+            bottom: -80px;
+            left: -80px;
+            background: radial-gradient(circle at center,
+                var(--secondary-color) 0%,
+                transparent 70%);
+            animation-delay: -3s;
+        }
+
+        .end-stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px),
+                radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 50px 50px, 100px 100px;
+            animation: twinkle 3s infinite alternate;
+            opacity: 0.5;
+        }
+
+        .end-quote {
+            font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+            color: var(--primary-color);
+            text-align: center;
+            margin-top: clamp(0.5rem, 1vh, 1rem);
+            font-style: italic;
+            opacity: 0;
+            animation: fadeInUp var(--animation-duration) var(--animation-timing) 0.6s forwards;
+            position: relative;
+            padding: clamp(0.5rem, 1vh, 1rem);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .end-quote::before,
+        .end-quote::after {
+            content: '"';
+            position: absolute;
+            font-size: 3em;
+            opacity: 0.2;
+            font-family: serif;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        .end-quote:hover::before,
+        .end-quote:hover::after {
+            opacity: 0.4;
+            transform: scale(1.2);
+        }
+
+        .end-quote::before {
+            left: 0;
+            top: -0.2em;
+        }
+
+        .end-quote::after {
+            right: 0;
+            bottom: -0.6em;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0.15;
+            }
+            50% {
+                transform: translateY(-30px) rotate(5deg) scale(1.1);
+                opacity: 0.2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .end-container {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            .end-text {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            }
+
+            .end-logo {
+                margin-bottom: 1rem;
+            }
+
+            .end-quote {
+                padding: 0.5rem 1rem;
+                font-size: clamp(0.8rem, 1.4vw, 1rem);
+                margin-top: 0.5rem;
+            }
+
+            .end-circle:nth-child(1) {
+                width: 150px;
+                height: 150px;
+                top: -50px;
+                right: -50px;
+            }
+
+            .end-circle:nth-child(2) {
+                width: 120px;
+                height: 120px;
+                bottom: -30px;
+                left: -30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="accent-line"></div>
+        <div class="accent-circle"></div>
+        
+        <main class="slide-content">
+            <div class="end-container">
+                <div class="end-decoration">
+                    <div class="end-stars"></div>
+                    <div class="end-circle"></div>
+                    <div class="end-circle"></div>
+                </div>
+
+                <div class="end-logo">VOICE+</div>
+                
+                <div class="end-text">
+                    不仅是翻译工具，更是连接全球粉丝与偶像的<span class="end-highlight">"数字巴别塔"</span>。
+                    通过<span class="end-highlight">AI</span>与<span class="end-highlight">Web3</span>的深度融合，
+                    重新定义跨语言交流的边界，让每一次翻译都成为照亮偶像星途的萤火。
+                </div>
+
+                <div class="end-quote">
+                    Breaking language barriers, connecting hearts worldwide
+                </div>
+            </div>
+        </main>
+
+        <footer class="slide-footer">
+            <span class="page-number">09 / 09</span>
+            <div class="navigation">
+                <a href="page8-roadmap.html" class="nav-button">
+                    <i class="fas fa-arrow-left"></i>
+                    返回
+                </a>
+                <a href="page1-cover.html" class="nav-button">
+                    首页
+                    <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const endText = document.querySelector('.end-text');
+        const endLogo = document.querySelector('.end-logo');
+        
+        // 为文本容器添加鼠标跟随效果
+        endText.addEventListener('mousemove', (e) => {
+            const rect = endText.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            endText.style.setProperty('--mouse-x', `${x}px`);
+            endText.style.setProperty('--mouse-y', `${y}px`);
+            
+            const rotateY = ((x - rect.width / 2) / rect.width) * 5;
+            const rotateX = ((y - rect.height / 2) / rect.height) * -5;
+            
+            endText.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+        
+        endText.addEventListener('mouseleave', () => {
+            endText.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+        });
+        
+        // 为Logo添加悬停效果
+        endLogo.addEventListener('mousemove', (e) => {
+            const rect = endLogo.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const rotateY = ((x - rect.width / 2) / rect.width) * 10;
+            const rotateX = ((y - rect.height / 2) / rect.height) * -10;
+            
+            endLogo.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+        });
+        
+        endLogo.addEventListener('mouseleave', () => {
+            endLogo.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+        });
+    });
+    </script>
+</body>
+</html> 
